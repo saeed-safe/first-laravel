@@ -18,7 +18,8 @@ class PostController extends Controller implements HasMiddleware
     }
     public function index()
     {
-        return Post::all();
+        return Post::with('user')->latest()->get();
+
     }
 
     /**
@@ -31,7 +32,7 @@ class PostController extends Controller implements HasMiddleware
             "body"=> "required",
         ]);
         $post=$request->user()->Posts()->create($fields);
-        return $post;
+        return ['post' => $post,'user' => $post->user];
     }
 
     /**
@@ -39,7 +40,7 @@ class PostController extends Controller implements HasMiddleware
      */
     public function show(Post $post)
     {
-        return $post;
+        return ['post' => $post,'user' => $post->user];
     }
 
     /**
